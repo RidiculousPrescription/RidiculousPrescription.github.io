@@ -1,9 +1,4 @@
-/* Extension demonstrating a blocking command block */
-/* Sayamindu Dasgupta <sayamindu@media.mit.edu>, May 2014 */
-
-new (function() {
-    var ext = this;
-
+(function(ext) {
     // Cleanup function when the extension is unloaded
     ext._shutdown = function() {};
 
@@ -13,24 +8,26 @@ new (function() {
         return {status: 2, msg: 'Ready'};
     };
 
-    // Functions for block with type 'w' will get a callback function as the 
-    // final argument. This should be called to indicate that the block can
-    // stop waiting.
-    ext.wait_random = function(callback) {
-        wait = Math.random();
-        console.log('Waiting for ' + wait + ' seconds');
-        window.setTimeout(function() {
-            callback();
-        }, wait*1000);
+    ext.get_temp = function(location, callback) {
+        // Make an AJAX call to the Open Weather Maps API
+        $.ajax({
+              url: 'http://api.openweathermap.org/data/2.5/weather?q='+location+'&units=imperial',
+              dataType: 'jsonp',
+              success: function( weather_data ) {
+                  // Got the data - parse it and return the temperature
+                  temperature = weather_data['main']['temp'];
+                  callback(temperature);
+              }
+        });
     };
 
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['w', 'wait for random time', 'wait_random'],
+            ['R', 'current temperature in city %s', 'get_temp', 'Boston, MA'],
         ]
     };
 
     // Register the extension
-    ScratchExtensions.register('Random wait extension', descriptor, ext);
-})();
+    ScratchExtensions.register('Weather extension', descriptor, ext);
+})({});
