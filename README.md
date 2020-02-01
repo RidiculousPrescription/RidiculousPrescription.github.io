@@ -1,1 +1,1 @@
-# RidiculousPrescription.github.io
+This is the Inputs and Outputs Scratch
