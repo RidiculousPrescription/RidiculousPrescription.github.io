@@ -11,12 +11,12 @@
     ext.get_temp = function(location, callback) {
         // Make an AJAX call to the Open Weather Maps API
         $.ajax({
-              url: 'http://api.openweathermap.org/data/2.5/weather?q='+location+'&units=imperial',
+              url: 'https://en.wikipedia.org/w/api.php?action=query&titles='+location+'Rwanda&prop=pageviews&pvipdays=1',
               dataType: 'jsonp',
               success: function( weather_data ) {
                   // Got the data - parse it and return the temperature
-                  temperature = weather_data['main']['temp'];
-                  callback(temperature);
+                  count = weather_data['query']['pages'];
+                  callback(count);
               }
         });
     };
@@ -24,7 +24,7 @@
     // Block and block menu descriptions
     var descriptor = {
         blocks: [
-            ['R', 'current temperature in city %s', 'get_temp', 'Boston, MA'],
+            ['R', 'page views for page %s', 'get_temp', 'Rwanda'],
         ]
     };
 
