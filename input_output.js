@@ -18,7 +18,10 @@
                   // Got the data - parse it and return the temperature
                   count = weather_data['query']['pages'];
                   alert(count);
-              }
+              },
+			  error: function() {
+				  alert('An error occurred'");
+			  }
         });
     };
 
