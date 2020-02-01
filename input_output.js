@@ -12,12 +12,12 @@
 		alert('Fish pie');
         // Make an AJAX call to the Open Weather Maps API
         $.ajax({
-              url: 'https://en.wikipedia.org/w/api.php?action=query&titles='+location+'Rwanda&prop=pageviews&pvipdays=1',
+              url: 'https://en.wikipedia.org/w/api.php?action=query&titles='+location+'&prop=pageviews&pvipdays=1',
               dataType: 'jsonp',
               success: function( weather_data ) {
                   // Got the data - parse it and return the temperature
                   count = weather_data['query']['pages'];
-                  callback(count);
+                  alert(count);
               }
         });
     };
