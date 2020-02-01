@@ -9,6 +9,7 @@
     };
 
     ext.get_temp = function(location, callback) {
+		alert('Fish pie');
         // Make an AJAX call to the Open Weather Maps API
         $.ajax({
               url: 'https://en.wikipedia.org/w/api.php?action=query&titles='+location+'Rwanda&prop=pageviews&pvipdays=1',
