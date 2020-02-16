@@ -12,12 +12,11 @@
 		alert('Fish pie');
         // Make an AJAX call to the Open Weather Maps API
         $.ajax({
-              url: 'https://en.wikipedia.org/w/api.php?action=query&titles='+location+'&prop=pageviews&pvipdays=1',
-              dataType: 'jsonp',
-              success: function( weather_data ) {
-                  // Got the data - parse it and return the temperature
-                  count = weather_data['query']['pages'];
-                  alert(count);
+              url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
+              success: function(response) {
+					for (var i = 0; i < response.length; i++) {
+						alert(response[i].Id);
+					}
               },
 			  error: function() {
 				  alert('An error occurred');
