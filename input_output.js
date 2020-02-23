@@ -9,15 +9,18 @@
     };
 
     ext.get_temp = function(location, callback) {
-        $.ajax({
-              url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
-              success: function(response) {
-					resolve();
-              },
-			  error: function() {
-				  alert('An error occurred');
-			  }
-        });
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
+                success: function(response) {
+                    resolve();
+                },
+                error: function() {
+                    alert('An error occurred');
+                    reject();
+                }
+            });
+        }
     };
 
     // Block and block menu descriptions
