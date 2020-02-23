@@ -9,18 +9,15 @@
     };
 
     ext.get_temp = function(location, callback) {
-        // Make an AJAX call to the Open Weather Maps API
-        // $.ajax({
-        //       url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
-        //       success: function(response) {
-		// 			for (var i = 0; i < response.length; i++) {
-		// 				alert(response[i].Id);
-		// 			}
-        //       },
-		// 	  error: function() {
-		// 		  alert('An error occurred');
-		// 	  }
-        // });
+        $.ajax({
+              url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
+              success: function(response) {
+					resolve();
+              },
+			  error: function() {
+				  alert('An error occurred');
+			  }
+        });
     };
 
     // Block and block menu descriptions
