@@ -27,7 +27,8 @@
     var descriptor = {
         blocks: [
             ['R', 'page views for page %s', 'get_temp', 'Rwanda'],
-        ]
+        ],
+        url: 'https://ridiculousprescription.github.io/'
     };
 
     // Register the extension
