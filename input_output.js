@@ -20,7 +20,7 @@
                     reject();
                 }
             });
-        }
+        });
     };
 
     // Block and block menu descriptions
