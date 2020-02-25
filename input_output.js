@@ -88,6 +88,7 @@
                     contentType:'application/json',
                     success: function(response) {
                         currentInput = response[i].Content;
+                        handledOne = true;
                         resolve();
                         return;
                     },
@@ -95,14 +96,18 @@
                         // if the error is a 404 (not found), that means the item we tried
                         // to dequeue has aleady been dequeued, and we should try another one.
                         if (error.status == 404) {
-                            continue;
+                            return;
                         } else {
                             // Any other error is a failure.
+                            handledOne = true;
                             reject();
                             return;
                         }
                     }
                 });
+                if (handledOne) {
+                    return;
+                }
             }
 
             // If we get here, none of the tokens found were still there when we searched them
