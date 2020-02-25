@@ -83,7 +83,7 @@
                 return;
             }
 
-            var requestBody = { Id: response[i].Id, HandledBy: 'Scratch' }
+            var requestBody = { Id: response[0].Id, HandledBy: 'Scratch' }
             $.ajax({
                 url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
                 type: 'DELETE',
