@@ -78,41 +78,37 @@
     function getAndDequeueInput(response, resolve, reject) {
 
         return new Promise(function (resolve, reject) {
-            var handledOne = false;
-            for (var i=0; i<response.length; i++) {
-                var requestBody = { Id: response[i].Id, HandledBy: 'Scratch' }
-                $.ajax({
-                    url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
-                    type: 'DELETE',
-                    data: JSON.stringify(requestBody),
-                    contentType:'application/json',
-                    success: function(response) {
-                        currentInput = response[i].Content;
-                        handledOne = true;
-                        resolve();
-                        return;
-                    },
-                    error: function(error) {
-                        // if the error is a 404 (not found), that means the item we tried
-                        // to dequeue has aleady been dequeued, and we should try another one.
-                        if (error.status == 404) {
-                            return;
-                        } else {
-                            // Any other error is a failure.
-                            handledOne = true;
-                            reject();
-                            return;
-                        }
-                    }
-                });
-                if (handledOne) {
-                    return;
-                }
+            if (!response || response.length === 0) {
+                resolve();
+                return;
             }
 
-            // If we get here, none of the tokens found were still there when we searched them
-            // Not really an error, let's just exit without setting anything.
-            resolve();
+            var requestBody = { Id: response[i].Id, HandledBy: 'Scratch' }
+            $.ajax({
+                url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
+                type: 'DELETE',
+                data: JSON.stringify(requestBody),
+                contentType:'application/json',
+                success: function(response) {
+                    currentInput = response[0].Content;
+                    resolve();
+                    return;
+                },
+                error: function(error) {
+                    // if the error is a 404 (not found), that means the item we tried
+                    // to dequeue has aleady been dequeued, and we should try another one.
+                    if (error.status == 404) {
+                        // Remove the first entry
+                        response = response.slice(1);
+                        getAndDequeueInput(response, resolve, reject);
+                        return;
+                    } else {
+                        // Any other error is a failure.
+                        reject();
+                        return;
+                    }
+                }
+            });
         });
     }
 
