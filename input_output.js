@@ -14,9 +14,6 @@
         checkForInputs(query).then(
             function() {
                 callback();
-            },
-            function() {
-                callback();
             }   
         );
     };
@@ -29,10 +26,7 @@
         checkForInputs(query).then(
             function() {
                 callback();
-            },
-            function() {
-                callback();
-            }   
+            }
         );
     };
 
@@ -51,31 +45,22 @@
                     TokenType: query
                 },
                 success: function (response) {
-
                     // fail if there are no results for this input
                     if (!response || response.length === 0) {
                         reject();
                         return;
                     }
 
-                    getAndDequeueInput(response, resolve, reject);
-
-                },
-                error: function(error) {
-                    // if the error is a 401 (unauthorized), the token probably has expired,
-                    // so request a new one. 
-                    if (error.status == 401) {
-                        getAccessToken().then((token) => {
-                            spotifyToken = token;
-                            reject();
+                    getAndDequeueInput(response).then(
+                        function() {
+                            resolve();
                         });
-                    }
                 }
             });
         });
     };
 
-    function getAndDequeueInput(response, resolve, reject) {
+    function getAndDequeueInput(response) {
 
         return new Promise(function (resolve, reject) {
             if (!response || response.length === 0) {
@@ -94,7 +79,6 @@
                 success: function(response) {
                     currentInput = responseContent;
                     resolve();
-                    return;
                 },
                 error: function(error) {
                     // if the error is a 404 (not found), that means the item we tried
@@ -102,12 +86,14 @@
                     if (error.status == 404) {
                         // Remove the first entry
                         response = response.slice(1);
-                        getAndDequeueInput(response, resolve, reject);
-                        return;
+                        getAndDequeueInput(response).then(
+                            function() {
+                                resolve();
+                            }
+                        );
                     } else {
                         // Any other error is a failure.
                         reject();
-                        return;
                     }
                 }
             });
