@@ -78,6 +78,13 @@
     function getAndDequeueInput(response, resolve, reject) {
 
         return new Promise(function (resolve, reject) {
+            if (!response || response.length === 0) {
+                resolve();
+                return;
+            }
+
+            var responseContent = response[0].Content;
+
             var requestBody = { Id: response[0].Id, HandledBy: 'Scratch' }
             $.ajax({
                 url: 'https://y1h3v2tztb.execute-api.eu-west-2.amazonaws.com/Prod',
@@ -85,9 +92,7 @@
                 data: JSON.stringify(requestBody),
                 contentType:'application/json',
                 success: function(response) {
-                    if (response && response.length !== 0) {
-                        currentInput = response[0].Content;
-                    }
+                    currentInput = responseContent;
                     resolve();
                     return;
                 },
