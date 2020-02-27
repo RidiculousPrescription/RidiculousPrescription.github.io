@@ -11,11 +11,13 @@
     };
 
     ext.getInput = function(query, callback) {
-        checkForInputs(query).then(
-            function() {
-                callback();
-            }   
-        );
+        currentInput = '';
+        checkForInputs(query).then(() => {
+            callback();
+        }).catch(() => {
+            alert('An error occurred getting the input');
+            callback();
+        });
     };
 
     ext.currentInput = function() {
@@ -23,11 +25,12 @@
     };
 
     ext.sendToOutput = function(query, callback) {
-        checkForInputs(query).then(
-            function() {
-                callback();
-            }
-        );
+        checkForInputs(query).then(() => {
+            callback();
+        }).catch(() => {
+            alert('An error occurred sending to output');
+            callback();
+        });
     };
 
     function checkForInputs(query) {
@@ -45,16 +48,19 @@
                     TokenType: query
                 },
                 success: function (response) {
-                    // fail if there are no results for this input
+                    // If there are no results for this input, just exit with the current input at empty
                     if (!response || response.length === 0) {
-                        reject();
+                        resolve();
                         return;
                     }
 
-                    getAndDequeueInput(response).then(
-                        function() {
-                            resolve();
-                        });
+                    getAndDequeueInput(response).then(() => {
+                        resolve();
+                    });
+                },
+                error: function (error) {
+                    alert('An error occurred checking for inputs: ' + error);
+                    reject();
                 }
             });
         });
@@ -86,13 +92,12 @@
                     if (error.status == 404) {
                         // Remove the first entry
                         response = response.slice(1);
-                        getAndDequeueInput(response).then(
-                            function() {
-                                resolve();
-                            }
-                        );
+                        getAndDequeueInput(response).then(() => {
+                            resolve();
+                        });
                     } else {
                         // Any other error is a failure.
+                        alert('An error occurred getting and dequeueing: ' + error);
                         reject();
                     }
                 }
